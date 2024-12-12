@@ -16,7 +16,7 @@ This project is a Node.js web server built with Express and TypeScript. It provi
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/FlightsWebServer.git
+git clone https://github.com/Rostbif/FlightsWebServer.git
 cd FlightsWebServer/webserver
 ```
 
