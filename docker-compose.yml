@@ -1,0 +1,9 @@
+services:
+  web:
+    build:
+      context: ./webserver
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
