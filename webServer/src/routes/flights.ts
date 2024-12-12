@@ -119,35 +119,48 @@ router.get(
   }
 );
 
-// Number of flights from a specific country (inbound & outbound). (filter by country name)
+// Number of flights for a specific country (inbound & outbound). (filter by country name)
 router.get(
-  "/getNumberOfFlightsFromCountry",
+  "/getNumberOfFlightsToAndFromCountry",
   async (req: Request, res: Response) => {
     try {
       const country = req.query.country as string; // Get country form query parameters (and convert it into a string)
-      const query: QueryObject = {
-        country: country,
-      };
-      const flights = await fetchFlightsData(query);
-      res.json(flights.length);
+      if (country) {
+        const query: QueryObject = {
+          country: country,
+        };
+        const flights = await fetchFlightsData(query);
+        res.json(flights.length);
+      }
+      // if country name wasn't provided then we return "bad request"
+      else {
+        res.status(400).json({ message: "country name is missing!" });
+      }
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch flights data" });
     }
   }
 );
 
-// Number of outbound flights from a specific country. (filter outbound + country
+// Number of outbound flights To a specific country. (filter outbound + country)
 router.get(
-  "/getNumberOfOutboundFlightsFromCountry",
+  "/getNumberOfOutboundFlightsToCountry",
   async (req: Request, res: Response) => {
     try {
       const country = req.query.country as string; // Get country form query parameters (and convert it into a string)
-      const query: QueryObject = {
-        inboundOrOutbound: "outbound",
-        country: country,
-      };
-      const flights = await fetchFlightsData(query);
-      res.json(flights.length);
+
+      if (country) {
+        const query: QueryObject = {
+          inboundOrOutbound: "outbound",
+          country: country,
+        };
+        const flights = await fetchFlightsData(query);
+        res.json(flights.length);
+      }
+      // if country name wasn't provided then we return "bad request"
+      else {
+        res.status(400).json({ message: "country name is missing!" });
+      }
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch flights data" });
     }
@@ -160,12 +173,18 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const country = req.query.country as string; // Get country form query parameters (and convert it into a string)
-      const query: QueryObject = {
-        inboundOrOutbound: "inbound",
-        country: country,
-      };
-      const flights = await fetchFlightsData(query);
-      res.json(flights.length);
+      if (country) {
+        const query: QueryObject = {
+          inboundOrOutbound: "inbound",
+          country: country,
+        };
+        const flights = await fetchFlightsData(query);
+        res.json(flights.length);
+      }
+      // if country name wasn't provided then we return "bad request"
+      else {
+        res.status(400).json({ message: "country name is missing!" });
+      }
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch flights data" });
     }
@@ -177,10 +196,9 @@ router.get(
   "/getNumberOfDelayedFlights",
   async (req: Request, res: Response) => {
     try {
-      const country = req.query.country as string; // Get country form query parameters (and convert it into a string)
       let flights = await fetchFlightsData();
 
-      // if real departure time is not equal to estimated departure time => a delayed flight
+      // if real departure time is not equal to estimated departure time => a delayed flight (I can be more specific and check that it's greater...)
       flights = flights.filter((f) => f.CHSTOL !== f.CHPTOL);
       res.json(flights.length);
     } catch (error) {
@@ -270,10 +288,5 @@ router.get(
     }
   }
 );
-
-// Then dockerize it...
-// then order the code and submit it...
-// Write a clean code and useful comments,
-// add documentation about the server (API - routes) and how to build and run your server.
 
 export default router;

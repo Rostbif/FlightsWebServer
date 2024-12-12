@@ -9,7 +9,9 @@ app.use(express.json());
 
 // just a test
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello Ofir!");
+  res.send(
+    `Hello there! <br>Welcome to the flights API web server!  <br>See here the API documenation: <a href="https://github.com/Rostbif/FlightsWebServer"> https://github.com/Rostbif/FlightsWebServer </a>`
+  );
 });
 
 // the flights router
